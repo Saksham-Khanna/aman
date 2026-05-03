@@ -6,6 +6,7 @@ const Register = ({ onRegisterSuccess, onToggleMode }) => {
     name: '',
     email: '',
     password: '',
+    role: 'Member',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -78,7 +79,18 @@ const Register = ({ onRegisterSuccess, onToggleMode }) => {
               className="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none text-sm bg-slate-50/50 focus:bg-white"
               placeholder="••••••••"
             />
-            <p className="text-[10px] text-slate-400 ml-1">Minimum 6 characters</p>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest ml-1">System Role</label>
+            <select
+              value={formData.role}
+              onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+              className="w-full px-4 py-3.5 rounded-xl border border-slate-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all outline-none text-sm bg-slate-50/50 focus:bg-white cursor-pointer"
+            >
+              <option value="Member">Team Member</option>
+              <option value="Admin">System Administrator</option>
+            </select>
           </div>
           
           <button

@@ -7,7 +7,7 @@ const auth = require('../middleware/auth');
 
 // Register
 router.post('/register', async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
   try {
     if (!name || !email || !password) {
       return res.status(400).json({ msg: 'Please provide name, email, and password' });
@@ -22,10 +22,12 @@ router.post('/register', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     
-    // First user ever registered becomes the Admin (Head of Team)
-    // All subsequent users are Members — only an Admin can promote via Admin Portal
-    const userCount = await User.countDocuments();
-    const finalRole = userCount === 0 ? 'Admin' : 'Member';
+    // Use provided role if exists, otherwise fallback to first-user-is-admin logic
+    let finalRole = role;
+    if (!finalRole) {
+      const userCount = await User.countDocuments();
+      finalRole = userCount === 0 ? 'Admin' : 'Member';
+    }
     
     user = await User.create({ 
       name, 
